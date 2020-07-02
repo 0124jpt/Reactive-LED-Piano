@@ -48,11 +48,14 @@ void setup() {
 void loop() {
   buttonVal = digitalRead(9);
 if(buttonVal == HIGH){
-    if(colorVal == 15){
+    if(colorVal == 4){
       colorVal = 0;
       delay(500);
     }
-     else colorVal++;
+     else{
+      colorVal++;
+      delay(500);
+     }
   }
   
   MIDIread();
@@ -82,7 +85,7 @@ void handlennOn(byte _channel, byte number, byte value)
       //      leds[nn].setHSV(rainbowPos[nn], 255, map(value, 0, 127, 100, 255)); //HSV
       //      leds[nn + 1].setHSV(rainbowPos[nn + 1], 255, map(value, 0, 127, 100, 255)); //HSV
       for (int i = 0; i < 2; i++) {
-        leds[nn + i].setHSV(rainbowPos[nn + i], 255, map(value, 0, 127, 100, 255)); //HSV
+        leds[nn + i].setHSV(rainbowPos[nn + i], 255, value*2 /*map(value, 0, 127, 100, 255)*/); //HSV
       }
       break;
     case 1:
@@ -93,14 +96,14 @@ void handlennOn(byte _channel, byte number, byte value)
       break;
     case 2:
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Blue;
+        leds[nn + i].setHSV(0, 0, value*2);
         //held[nn+i] = 1;
       }
       // leds[nn + 1] = CRGB::Blue;
       break;
     case 3:
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Green;
+        leds[nn + i].setHSV(300, 100, value*2);
         //held[nn+i] = 1;
 
       }
@@ -108,11 +111,11 @@ void handlennOn(byte _channel, byte number, byte value)
       break;
     case 4:
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Red;
+        leds[nn + i].setHSV(16, 69, value*2);
       }
       //leds[nn + 1] = CRGB::Red;
       break;
-    case 5:
+    /*case 5:
       for (int i = 0; i < 2; i++) {
         leds[nn + i] = CRGB::HotPink;
       }
@@ -177,7 +180,7 @@ void handlennOn(byte _channel, byte number, byte value)
         leds[nn + i] = CRGB::White;
       }
       //leds[nn + 1] = CRGB::White;
-      break;
+      break;*/
 
   }
  if (value == 0 && sustain == 0) {
