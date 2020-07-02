@@ -21,10 +21,14 @@ uint8_t rainbowDivision = 255 / NUM_LEDS;
 
 int header, channel, note, velocity;
 bool sustain = 0;
+int buttonVal = 0;
+int colorVal = 0;
 //int held[NUM_LEDS];
 
 void setup() {
-
+  pinMode(9, INPUT);
+  pinMode(10,OUTPUT);
+  digitalWrite(10,HIGH);
   Serial.begin(115200);
 
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
@@ -42,7 +46,15 @@ void setup() {
 }
 
 void loop() {
-
+  buttonVal = digitalRead(9);
+if(buttonVal == HIGH){
+    if(colorVal == 15){
+      colorVal = 0;
+      delay(500);
+    }
+     else colorVal++;
+  }
+  
   MIDIread();
 
   FastLED.show();
@@ -65,7 +77,7 @@ void handlennOn(byte _channel, byte number, byte value)
 
   //Serial.println(channel);
 
-  switch (_channel) {
+  switch (colorVal) {
     case 0:
       //      leds[nn].setHSV(rainbowPos[nn], 255, map(value, 0, 127, 100, 255)); //HSV
       //      leds[nn + 1].setHSV(rainbowPos[nn + 1], 255, map(value, 0, 127, 100, 255)); //HSV
