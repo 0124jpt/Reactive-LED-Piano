@@ -96,14 +96,14 @@ void handlennOn(byte _channel, byte number, byte value)
       break;
     case 2:
       for (int i = 0; i < 2; i++) {
-        leds[nn + i].setHSV(0, 0, value*2);
+        leds[nn + i] = CRGB::Coral;
         //held[nn+i] = 1;
       }
       // leds[nn + 1] = CRGB::Blue;
       break;
     case 3:
       for (int i = 0; i < 2; i++) {
-        leds[nn + i].setHSV(300, 100, value*2);
+        leds[nn + i] = CRGB::Purple;
         //held[nn+i] = 1;
 
       }
@@ -111,7 +111,7 @@ void handlennOn(byte _channel, byte number, byte value)
       break;
     case 4:
       for (int i = 0; i < 2; i++) {
-        leds[nn + i].setHSV(16, 69, value*2);
+        leds[nn + i] = CRGB::Aqua;
       }
       //leds[nn + 1] = CRGB::Red;
       break;
