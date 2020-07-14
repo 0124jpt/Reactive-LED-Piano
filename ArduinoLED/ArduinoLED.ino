@@ -26,9 +26,6 @@ int colorVal = 0;
 //int held[NUM_LEDS];
 
 void setup() {
-  pinMode(9, INPUT);
-  pinMode(10,OUTPUT);
-  digitalWrite(10,HIGH);
   Serial.begin(115200);
 
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
@@ -46,17 +43,6 @@ void setup() {
 }
 
 void loop() {
-  buttonVal = digitalRead(9);
-if(buttonVal == HIGH){
-    if(colorVal == 4){
-      colorVal = 0;
-      delay(500);
-    }
-     else{
-      colorVal++;
-      delay(500);
-     }
-  }
   
   MIDIread();
 
@@ -80,7 +66,7 @@ void handlennOn(byte _channel, byte number, byte value)
 
   //Serial.println(channel);
 
-  switch (colorVal) {
+  switch (_channel) {
     case 0:
       //      leds[nn].setHSV(rainbowPos[nn], 255, map(value, 0, 127, 100, 255)); //HSV
       //      leds[nn + 1].setHSV(rainbowPos[nn + 1], 255, map(value, 0, 127, 100, 255)); //HSV
@@ -115,7 +101,7 @@ void handlennOn(byte _channel, byte number, byte value)
       }
       //leds[nn + 1] = CRGB::Red;
       break;
-    /*case 5:
+    case 5:
       for (int i = 0; i < 2; i++) {
         leds[nn + i] = CRGB::HotPink;
       }
@@ -180,7 +166,7 @@ void handlennOn(byte _channel, byte number, byte value)
         leds[nn + i] = CRGB::White;
       }
       //leds[nn + 1] = CRGB::White;
-      break;*/
+      break;
 
   }
  if (value == 0 && sustain == 0) {
