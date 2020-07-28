@@ -87,26 +87,25 @@ void handlennOn(byte _channel, byte number, byte value){
     }
     else if(colorVal == 3){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i].setHSV(265,100,value*2); // purple
+        leds[nn + i].setHSV(193,255,value*2); // purple
       }
     }
     else if(colorVal == 4){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i].setHSV(45,100,value*2); // orange
+        leds[nn + i].setHSV(31,224,value*2); // orange
       }
     }
     else if(colorVal == 5){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i].setHSV(106,59,value*2); // green
+        leds[nn + i].setHSV(95,157,value*2); // green
       }
     }
     else if(colorVal == 6){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i].setHSV(215,69,value*2); // blue
+        leds[nn + i].setHSV(142,255,value*2); // blue
       }
     }
 }
-
 void handlennOff(byte channel, byte number, byte value){
    int nn = number - 21;
     nn *= 2;
@@ -119,8 +118,6 @@ void MIDIread() {
 
   midiEventPacket_t ep = MidiUSB.read();
   
-    if(ep.header == 0)
-      break;
 
   if(ep.header == 0x9)
       handlennOn(
