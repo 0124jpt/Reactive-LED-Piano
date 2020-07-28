@@ -1,5 +1,5 @@
-#include "MIDIUSB.h" // by Gary Grewal
-#include "FastLED.h" // by Daniel Garcia
+#include "MIDIUSB.h" 
+#include "FastLED.h" 
 
 FASTLED_USING_NAMESPACE
 
