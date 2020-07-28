@@ -1,5 +1,5 @@
-#include "MIDIUSB.h" // by Gary Grewal
-#include "FastLED.h" // by Daniel Garcia
+#include "MIDIUSB.h"
+#include "FastLED.h" 
 
 FASTLED_USING_NAMESPACE
 
@@ -11,33 +11,27 @@ FASTLED_USING_NAMESPACE
 #define HUE_OFFSET 90
 CRGB leds[NUM_LEDS];
 
-#define BRIGHTNESS          255
+#define BRIGHTNESS         255
 #define FRAMES_PER_SECOND  120
-//////////////////////////////////////
 
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 uint8_t rainbowPos[NUM_LEDS] = {0};
 uint8_t rainbowDivision = 255 / NUM_LEDS;
 
 int header, channel, note, velocity;
-bool sustain = 0;
-int buttonVal = 0;
 int colorVal = 0;
-//int held[NUM_LEDS];
 
 void setup() {
   Serial.begin(115200);
 
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
-  // set master brightness control
-  FastLED.setBrightness(BRIGHTNESS);
+  FastLED.setBrightness(255); // max brightness
 
 
   for (int i = 0; i < NUM_LEDS; i++) {
     rainbowPos[i] = (gHue + HUE_OFFSET) % 255;
     gHue += rainbowDivision;
-    //Serial.println(rainbowPos[i]);
   }
 
 }
@@ -47,7 +41,6 @@ void loop() {
   MIDIread();
 
   FastLED.show();
-  // insert a delay to keep the framerate modest
   FastLED.delay(100 / FRAMES_PER_SECOND);
 }
 
@@ -64,206 +57,129 @@ void handlennOn(byte _channel, byte number, byte value)
   leds[nn + 1].setHSV(rainbowPos[nn + 1], 255, map(value, 0, 127, 100, 255)); //HSV
 
 
-  //Serial.println(channel);
 
-  switch (_channel) {
-    case 0:
-      //      leds[nn].setHSV(rainbowPos[nn], 255, map(value, 0, 127, 100, 255)); //HSV
-      //      leds[nn + 1].setHSV(rainbowPos[nn + 1], 255, map(value, 0, 127, 100, 255)); //HSV
+    if(_channel == 0){ // color spectrum
       for (int i = 0; i < 2; i++) {
         leds[nn + i].setHSV(rainbowPos[nn + i], 255, value*2 /*map(value, 0, 127, 100, 255)*/); //HSV
       }
-      break;
-    case 1:
+    }
+    else if(_channel == 1){ // random color
       for (int i = 0; i < 2; i++) {
         leds[nn + i].setHSV(randColor,255,value*2);
       }
-      // leds[nn + 1].setHue(randColor);
-      break;
-    case 2:
+    }
+    else if(_channel == 2){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Coral;
-        //held[nn+i] = 1;
+        leds[nn + i] = CRGB::Crimson;
       }
-      // leds[nn + 1] = CRGB::Blue;
-      break;
-    case 3:
-      for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Purple;
-        //held[nn+i] = 1;
-
-      }
-      // leds[nn + 1] = CRGB::Green;
-      break;
-    case 4:
-      for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Aqua;
-      }
-      //leds[nn + 1] = CRGB::Red;
-      break;
-    case 5:
-      for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::HotPink;
-      }
-      //leds[nn + 1] = CRGB::HotPink;
-      break;
-    case 6:
-      for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Purple;
-      }
-      //leds[nn + 1] = CRGB::Purple;
-      break;
-    case 7:
-      for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Aqua;
-      }
-      //leds[nn + 1] = CRGB::Aqua;
-      break;
-    case 8:
-      for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Aquamarine;
-      }
-      //leds[nn + 1] = CRGB::Aquamarine;
-      break;
-    case 9:
+    }
+    else if(_channel == 3){
       for (int i = 0; i < 2; i++) {
         leds[nn + i] = CRGB::Coral;
       }
-      // leds[nn + 1] = CRGB::Coral;
-      break;
-    case 10:
+    }
+    else if(_channel == 4){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::DarkOrange;
+        leds[nn + i] = CRGB::Orange;
       }
-      //leds[nn + 1] = CRGB::DarkOrange;
-      break;
-    case 11:
+    }
+    else if(_channel == 5){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::DeepPink;
+        leds[nn + i] = CRGB::GoldenRod;
       }
-      //leds[nn + 1] = CRGB::Blue;
-      break;
-    case 12:
+    }
+    else if(_channel == 6){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Magenta;
+        leds[nn + i] = CRGB::Yellow;
       }
-      //leds[nn + 1] = CRGB::Green;
-      break;
-    case 13:
+    }
+    else if(_channel == 7){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Red;
+        leds[nn + i] = CRGB::GreenYellow;
       }
-      //leds[nn + 1] = CRGB::Cyan;
-      break;
-    case 14:
+    }
+    else if(_channel == 8){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Green;
+        leds[nn + i] = CRGB::ForestGreen;
       }
-      //leds[nn + 1] = CRGB::Yellow;
-      break;
-    case 15:
+    }
+    else if(_channel == 9){
+      for (int i = 0; i < 2; i++) {
+        leds[nn + i] = CRGB::MediumAquaMarine;
+      }
+    }
+    else if(_channel == 10){
+      for (int i = 0; i < 2; i++) {
+        leds[nn + i] = CRGB::LightBlue;
+      }
+    }
+    else if(_channel == 11){
+      for (int i = 0; i < 2; i++) {
+        leds[nn + i] = CRGB::Blue;
+      }
+    }
+    else if(_channel == 12){
+      for (int i = 0; i < 2; i++) {
+        leds[nn + i] = CRGB::BlueViolet;
+      }
+    }
+    else if(_channel == 13){
+      for (int i = 0; i < 2; i++) {
+        leds[nn + i] = CRGB::Fuchsia;
+      }
+    }
+    else if(_channel == 14){
+      for (int i = 0; i < 2; i++) {
+        leds[nn + i] = CRGB::Tan;
+      }
+    }
+    else if(_channel == 15){
       for (int i = 0; i < 2; i++) {
         leds[nn + i] = CRGB::White;
       }
-      //leds[nn + 1] = CRGB::White;
-      break;
-
-  }
- if (value == 0 && sustain == 0) {
-    for (int i = 0; i < 2; i++) {
-      leds[nn + i].setRGB(0, 0, 0);
     }
-    leds[nn + 1].setRGB(0, 0, 0);
-  }
-  //leds[nn].setRGB( 255, 68, 221); //RGB
-  //leds[nn + 1] = CRGB::HotPink;*/
-}
+
 
 void handlennOff(byte channel, byte number, byte value)
 {
-  //if(sustain == 0){
    int nn = number - 21;
     nn *= 2;
     for (int i = 0; i < 2; i++) {
-      //held[nn + i] = 0;
       leds[nn + i].setRGB(0, 0, 0);
     }
-    //leds[nn + 1].setRGB(0, 0, 0);
-  //}
-
 }
 
-void handleControlChange(byte channel, byte number, byte value)
-{
-    /*if(number==64 && value==0){
-      for(int i=0; i<NUM_LEDS; i++){
-        if(held[i] == 0) leds[i].setRGB(0,0,0);
-      }
-      sustain = 0;
-    }
-    else sustain = 1;*/
-}
+
 
 void MIDIread() {
 
-  midiEventPacket_t rx = MidiUSB.read();
-  switch (rx.header) {
-    case 0:
-      break;//No pending events
+  midiEventPacket_t ep = MidiUSB.read();
+  
+    if(ep.header == 0)
+      break;
 
-    case 0x9:
+  if(ep.header == 0x9)
       handlennOn(
-        rx.byte1 & 0xF,  //channel
-        rx.byte2,        //pitch
-        rx.byte3         //velocity
+        ep.byte1 & 0xF,  //channel
+        ep.byte2,        //pitch
+        ep.byte3         //velocity
       );
-      break;
 
-    case 0x8:
+  if(ep.header == 0x8)
       handlennOff(
-        rx.byte1 & 0xF,  //channel
-        rx.byte2,        //pitch
-        rx.byte3         //velocity
+        ep.byte1 & 0xF,  //channel
+        ep.byte2,        //pitch
+        ep.byte3         //velocity
       );
-      break;
-      /*
-      case 0xB:
-        handleControlChange(
-        rx.byte1 & 0xF,  //channel
-        rx.byte2,        //cc number
-        rx.byte3         //value
-      );
-      break;*/
-  }
-
-  if (rx.header != 0) {
-    //Serial.print("Unhandled MIDI message: ");
-     
-    
-    Serial.print(rx.byte1 & 0xF, DEC);
+ 
+  if (ep.header != 0) {
+    Serial.print(ep.byte1 & 0xF, DEC);
     Serial.print("-");
-    Serial.print(rx.byte1, DEC);
+    Serial.print(ep.byte1, DEC);
     Serial.print("-");
-    Serial.print(rx.byte2, DEC);
+    Serial.print(ep.byte2, DEC);
     Serial.print("-");
-    Serial.println(rx.byte3, DEC);
+    Serial.println(ep.byte3, DEC);
   
 }
-}
-
-/////////////////////////////////////////////
-// Arduino (pro)micro midi functions MIDIUSB Library
-void nnOn(byte channel, byte pitch, byte velocity) {
-  midiEventPacket_t nnOn = {0x09, 0x90 | channel, pitch, velocity};
-  MidiUSB.sendMIDI(nnOn);
-}
-
-void nnOff(byte channel, byte pitch, byte velocity) {
-  midiEventPacket_t nnOff = {0x08, 0x80 | channel, pitch, velocity};
-  MidiUSB.sendMIDI(nnOff);
-}
-
-void controlChange(byte channel, byte control, byte value) {
-  midiEventPacket_t event = {0x0B, 0xB0 | channel, control, value};
-  MidiUSB.sendMIDI(event);
 }
