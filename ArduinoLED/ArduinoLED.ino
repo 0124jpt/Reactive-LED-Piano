@@ -85,7 +85,7 @@ void handlennOn(byte _channel, byte number, byte value)
     }
     else if(_channel == 5){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::GoldenRod;
+        leds[nn + i] = CRGB::Gold;
       }
     }
     else if(_channel == 6){
@@ -105,7 +105,7 @@ void handlennOn(byte _channel, byte number, byte value)
     }
     else if(_channel == 9){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::MediumAquaMarine;
+        leds[nn + i] = CRGB::DarkGreen;
       }
     }
     else if(_channel == 10){
@@ -138,7 +138,7 @@ void handlennOn(byte _channel, byte number, byte value)
         leds[nn + i] = CRGB::White;
       }
     }
-
+}
 
 void handlennOff(byte channel, byte number, byte value)
 {
@@ -154,9 +154,7 @@ void handlennOff(byte channel, byte number, byte value)
 void MIDIread() {
 
   midiEventPacket_t ep = MidiUSB.read();
-  
-    if(ep.header == 0)
-      break;
+ 
 
   if(ep.header == 0x9)
       handlennOn(
