@@ -60,8 +60,7 @@ void loop() {
   FastLED.delay(100 / FRAMES_PER_SECOND);
 }
 
-void handlennOn(byte _channel, byte number, byte value)
-{
+void handlennOn(byte _channel, byte number, byte value){
 
   int nn = number - 21;
   nn *= 2;
@@ -106,6 +105,7 @@ void handlennOn(byte _channel, byte number, byte value)
         leds[nn + i].setHSV(215,69,value*2); // blue
       }
     }
+}
 
 void handlennOff(byte channel, byte number, byte value){
    int nn = number - 21;
