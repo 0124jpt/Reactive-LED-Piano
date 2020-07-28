@@ -18,7 +18,7 @@ uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 uint8_t rainbowPos[NUM_LEDS] = {0};
 uint8_t rainbowDivision = 255 / NUM_LEDS;
 
-int header, channel, note, velocity;
+int header, channel, velocity;
 int buttonVal = 0;
 int colorVal = 0;
 
@@ -40,17 +40,19 @@ void setup() {
 }
 
 void loop() {
+
+  // reads button from pin 9 and increases the colorVal (0-6)
   buttonVal = digitalRead(9);
-if(buttonVal == HIGH){
-    if(colorVal == 4){
-      colorVal = 0;
-      delay(500);
+  if(buttonVal == HIGH){
+      if(colorVal == 6){
+        colorVal = 0;
+        delay(500);
+      }
+       else{
+        colorVal++;
+        delay(500);
+       }
     }
-     else{
-      colorVal++;
-      delay(500);
-     }
-  }
   
   MIDIread();
 
@@ -62,7 +64,6 @@ void handlennOn(byte _channel, byte number, byte value)
 {
 
   int nn = number - 21;
-  note = number;
   nn *= 2;
   byte randColor = random(0, 255);
 
@@ -82,17 +83,27 @@ void handlennOn(byte _channel, byte number, byte value)
     }
     else if(colorVal == 2){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Crimson;
+        leds[nn + i].setHSV(0,0,value*2); // white
       }
     }
     else if(colorVal == 3){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Coral;
+        leds[nn + i].setHSV(265,100,value*2); // purple
       }
     }
     else if(colorVal == 4){
       for (int i = 0; i < 2; i++) {
-        leds[nn + i] = CRGB::Orange;
+        leds[nn + i].setHSV(45,100,value*2); // orange
+      }
+    }
+    else if(colorVal == 5){
+      for (int i = 0; i < 2; i++) {
+        leds[nn + i].setHSV(106,59,value*2); // green
+      }
+    }
+    else if(colorVal == 6){
+      for (int i = 0; i < 2; i++) {
+        leds[nn + i].setHSV(215,69,value*2); // blue
       }
     }
 
